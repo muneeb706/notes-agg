@@ -1,0 +1,7 @@
+[run]
+data_file = ./.backend_coverage
+source = core
+branch = True
+
+[html]
+directory = ./backend_coverage/html
