@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     # allauth
     "allauth",
     "allauth.account",
+    # djangorestframework
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
