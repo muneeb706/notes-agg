@@ -1,6 +1,10 @@
 describe('Home Tests', () => {
   beforeEach(() => {
+    cy.intercept('GET', '/api/v1/profile/', {
+      fixture: 'getUserProfile.json',
+    }).as('getUserProfileApi');
     cy.visit('/');
+    cy.wait('@getUserProfileApi');
     cy.intercept('POST', '/accounts/logout', { fixture: 'logout.json' }).as(
       'logoutApi',
     );
@@ -15,7 +19,9 @@ describe('Home Tests', () => {
   });
 
   it('should contain a dropdown with the username', () => {
-    cy.get('.bg-body-tertiary #basic-nav-dropdown').should('exist');
+    cy.get('.bg-body-tertiary #basic-nav-dropdown')
+      .should('exist')
+      .should('contain', 'testuser');
   });
 
   it('should perform logout when logout option is clicked', () => {

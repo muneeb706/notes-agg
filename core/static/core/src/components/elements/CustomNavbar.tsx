@@ -6,7 +6,11 @@ import { ApiContext } from '../../api/context/ApiContext';
 import { useContext } from 'react';
 import { ApiService } from '../../api/api';
 
-function CustomNavbar() {
+interface CustomNavbarProps {
+  username: string | null;
+}
+
+function CustomNavbar({ username }: CustomNavbarProps) {
   const api: ApiService = useContext(ApiContext);
   const handleLogout = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -19,7 +23,7 @@ function CustomNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <NavDropdown title="{username}" id="basic-nav-dropdown">
+            <NavDropdown title={username} id="basic-nav-dropdown">
               <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
             </NavDropdown>
           </Nav>
