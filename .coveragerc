@@ -1,0 +1,8 @@
+[run]
+data_file = ./.backend_coverage
+omit = **/tests/*
+source = core
+branch = 1
+
+[html]
+directory = ./backend_coverage/html

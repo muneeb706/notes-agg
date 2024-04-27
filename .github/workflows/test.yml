@@ -1,0 +1,94 @@
+---
+name: Test
+
+on: [pull_request, workflow_dispatch]
+
+env:
+  DB_NAME: github_actions
+  DB_USER: postgres
+  DB_PASSWORD: postgres
+
+jobs:
+  build:
+    name: ${{ matrix.app-name }} (python ${{ matrix.python-version }}, node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    outputs:
+      backendTest: ${{ steps.backend.outcome }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.11]
+        node-version: [18]
+        app-name: [core]
+    
+    env:
+      STATIC_DIR: ${{ matrix.app-name }}/static/${{ matrix.app-name }}
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: ${{ env.DB_USER }}
+          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRES_DB: ${{ env.DB_NAME }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          cache-dependency-path: requirements.test.txt
+
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.test.txt
+
+      - name: Run backend tests
+        id: backend
+        run: |
+          coverage run manage.py test core/tests
+          coverage xml
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install frontend dependencies
+        run: |
+          yarn --cwd ${{ env.STATIC_DIR }}
+
+      - name: Run frontend tests
+        run: |
+          yarn --cwd ${{ env.STATIC_DIR }} start &
+          yarn --cwd ${{ env.STATIC_DIR }} cy:run-e2e
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          name: ${{ matrix.app-name }} (python ${{ matrix.python-version }}, node ${{ matrix.node-version }})
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml,./${{ env.STATIC_DIR }}/.nyc_output/lcov.info # path to coverage report file
+          fail_ci_if_error: true # optional: fail the build if Codecov runs into an error

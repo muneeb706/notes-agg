@@ -1,0 +1,5 @@
+Backend:
+-  Formatting: 
+    pre-commit run --files **/urls.py , pre-commit run --files templates/**/*.html
+- Testing:
+    coverage run manage.py test core/tests && coverage html
