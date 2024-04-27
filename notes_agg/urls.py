@@ -6,6 +6,7 @@ from notes_agg import settings
 urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("admin/", admin.site.urls),
+    # core app
     path("", include("core.urls")),
 ]
 
