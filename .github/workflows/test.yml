@@ -57,11 +57,9 @@ jobs:
 
       - name: Run backend tests
         id: backend
-        continue-on-error: true
         run: |
           coverage run manage.py test core/tests
           coverage xml
-          exit 1
 
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
@@ -94,10 +92,3 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml,./${{ env.STATIC_DIR }}/.nyc_output/lcov.info # path to coverage report file
           fail_ci_if_error: true # optional: fail the build if Codecov runs into an error
-  
-  check:
-    needs: build
-    runs-on: ubuntu-latest
-    if: needs.build.outputs.backendTest == 'failure'
-    steps:
-      - run: exit 1
