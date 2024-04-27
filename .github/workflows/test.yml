@@ -77,7 +77,7 @@ jobs:
 
       - name: Run frontend tests
         run: |
-          yarn --cwd ${{ matrix.app-name }}/static/${{ matrix.app-name }} start
+          yarn --cwd ${{ matrix.app-name }}/static/${{ matrix.app-name }} start &
           yarn --cwd ${{ matrix.app-name }}/static/${{ matrix.app-name }} cy:run-e2e
 
       - name: Upload coverage
