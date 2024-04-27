@@ -20,7 +20,9 @@ jobs:
         django-version: [5.0]
         node-version: [18]
         app-name: [core]
-      
+    env:
+      STATIC_DIR: ${{ matrix.app-name }}/static/${{ matrix.app-name }}
+
     services:
       postgres:
         image: postgres:14
@@ -73,17 +75,17 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-          yarn --cwd ${{ matrix.app-name }}/static/${{ matrix.app-name }}
+          yarn --cwd ${{ env.STATIC_DIR }}
 
       - name: Run frontend tests
         run: |
-          yarn --cwd ${{ matrix.app-name }}/static/${{ matrix.app-name }} start &
-          yarn --cwd ${{ matrix.app-name }}/static/${{ matrix.app-name }} cy:run-e2e
+          yarn --cwd ${{ env.STATIC_DIR }} start &
+          yarn --cwd ${{ env.STATIC_DIR }} cy:run-e2e
 
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:
           name: ${{ matrix.app-name }} (python ${{ matrix.python-version }}, django ${{ matrix.django-version }}, node ${{ matrix.node-version }})
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml,./.nyc_output/lcov.info # path to coverage report file
+          file: ./coverage.xml,./${{ env.STATIC_DIR }}/.nyc_output/lcov.info # path to coverage report file
           fail_ci_if_error: true # optional: fail the build if Codecov runs into an error
