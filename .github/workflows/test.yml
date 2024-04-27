@@ -96,7 +96,7 @@ jobs:
           fail_ci_if_error: true # optional: fail the build if Codecov runs into an error
   
   check:
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
     if: needs.build.outputs.backendTest == 'failure'
     steps:
