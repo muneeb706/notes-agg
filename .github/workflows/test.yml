@@ -10,14 +10,13 @@ env:
 
 jobs:
   build:
-    name: ${{ matrix.app-name }} (python ${{ matrix.python-version }}, django ${{ matrix.django-version }}, node ${{ matrix.node-version }})
+    name: ${{ matrix.app-name }} (python ${{ matrix.python-version }}, node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         python-version: [3.11]
-        django-version: [5.0]
         node-version: [18]
         app-name: [core]
     env:
@@ -57,6 +56,7 @@ jobs:
         run: |
           coverage run manage.py test core/tests
           coverage xml
+          exit 1
 
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
@@ -85,7 +85,7 @@ jobs:
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:
-          name: ${{ matrix.app-name }} (python ${{ matrix.python-version }}, django ${{ matrix.django-version }}, node ${{ matrix.node-version }})
+          name: ${{ matrix.app-name }} (python ${{ matrix.python-version }}, node ${{ matrix.node-version }})
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml,./${{ env.STATIC_DIR }}/.nyc_output/lcov.info # path to coverage report file
           fail_ci_if_error: true # optional: fail the build if Codecov runs into an error
