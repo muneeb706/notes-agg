@@ -1,7 +1,14 @@
 ---
 name: Test
 
-on: [push, pull_request, workflow_dispatch]
+on: [pull_request, workflow_dispatch]
+
+env:
+  DB_NAME: github_actions
+  DB_USER: postgres
+  DB_PASSWORD: postgres
+  DB_HOST: localhost
+  DB_PORT: 5432
 
 jobs:
   build:
@@ -19,11 +26,11 @@ jobs:
       postgres:
         image: postgres:14
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: github_actions
+          POSTGRES_USER: ${{ ev.DB_USER }}
+          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRES_DB: ${{ env.DB_NAME }}
         ports:
-          - 5432:5432
+          - ${{ env.DB_PORT }}:${{ env.DB_PORT }}
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
