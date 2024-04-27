@@ -1,0 +1,6 @@
+settings_local.py
+**/__pycache__/
+.backend_coverage
+**/.nyc_output/
+**/cypress-coverage/
+**/.DS_Store

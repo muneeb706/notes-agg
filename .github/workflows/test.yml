@@ -70,13 +70,14 @@ jobs:
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          
+
       - name: Install frontend dependencies
         run: |
           yarn --cwd ${{ matrix.app-name }}/static/${{ matrix.app-name }}
 
       - name: Run frontend tests
         run: |
+          yarn --cwd ${{ matrix.app-name }}/static/${{ matrix.app-name }} start
           yarn --cwd ${{ matrix.app-name }}/static/${{ matrix.app-name }} cy:run-e2e
 
       - name: Upload coverage
