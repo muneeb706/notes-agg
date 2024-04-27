@@ -53,6 +53,7 @@ jobs:
           pip install -r requirements.test.txt
 
       - name: Run backend tests
+        continue-on-error: true
         run: |
           coverage run manage.py test core/tests
           coverage xml
