@@ -98,6 +98,6 @@ jobs:
   check:
     needs: test
     runs-on: ubuntu-latest
-    if: needs.test.outputs.backendTest == 'failure'
+    if: needs.build.outputs.backendTest == 'failure'
     steps:
       - run: exit 1
