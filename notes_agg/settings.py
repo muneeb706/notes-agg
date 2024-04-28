@@ -154,6 +154,10 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Notion
+NOTION_SECRET = os.environ.get("NOTION_SECRET")
+NOTION_READING_LIST_DB_ID = os.environ.get("NOTION_READING_LIST_DB_ID")
+
 # Import local settings only if they exist
 try:
     from settings_local import *
