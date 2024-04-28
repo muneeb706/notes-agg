@@ -3,7 +3,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 
 
-class UserProfileAPITest(TestCase):
+class NotesAPITest(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(username="testuser", password="12345")
@@ -11,9 +11,9 @@ class UserProfileAPITest(TestCase):
     def test_success(self):
         self.client.login(username="testuser", password="12345")
 
-        response = self.client.get(reverse("user_profile"))
+        response = self.client.get(reverse("notes"))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {"username": "testuser"})
+        self.assertEqual(response.json(), {"notes": "notes"})
 
     def tearDown(self):
         self.user.delete()

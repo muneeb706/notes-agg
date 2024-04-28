@@ -35,7 +35,7 @@ home = HomeView.as_view()
 # API Views
 
 
-class UserProfileView(APIView):
+class UserProfileAPIView(APIView):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -48,4 +48,15 @@ class UserProfileView(APIView):
         )
 
 
-user_profile = UserProfileView.as_view()
+user_profile = UserProfileAPIView.as_view()
+
+
+class NotesAPIView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"notes": "notes"})
+
+
+notes = NotesAPIView.as_view()
