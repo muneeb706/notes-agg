@@ -1,10 +1,17 @@
-describe('Home Tests', () => {
+describe('App Tests', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/v1/profile/', {
       fixture: 'getUserProfile.json',
     }).as('getUserProfileApi');
+    cy.intercept('GET', '/api/v1/notes/', { fixture: 'getNotes.json' }).as(
+      'getNotesApi',
+    );
+
     cy.visit('/');
+
     cy.wait('@getUserProfileApi');
+    cy.wait('@getNotesApi');
+
     cy.intercept('POST', '/accounts/logout', { fixture: 'logout.json' }).as(
       'logoutApi',
     );
@@ -22,6 +29,10 @@ describe('Home Tests', () => {
     cy.get('.bg-body-tertiary #basic-nav-dropdown')
       .should('exist')
       .should('contain', 'testuser');
+  });
+
+  it('should render notes cards', () => {
+    cy.get('.card').should('have.length', 2);
   });
 
   it('should perform logout when logout option is clicked', () => {

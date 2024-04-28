@@ -35,4 +35,18 @@ export class ApiService {
       console.log(error);
     }
   }
+
+  async getNotes() {
+    try {
+      const response: AxiosResponse = await this.apiClient.get(
+        '/api/v1/notes/',
+        { withCredentials: true },
+      );
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
 }

@@ -1,7 +1,11 @@
 ---
 name: Test
 
-on: [pull_request, workflow_dispatch]
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
 
 env:
   DB_NAME: github_actions

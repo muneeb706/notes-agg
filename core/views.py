@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from core.services.notion import NotionClient
 from notes_agg import settings
 
 
@@ -35,7 +36,7 @@ home = HomeView.as_view()
 # API Views
 
 
-class UserProfileView(APIView):
+class UserProfileAPIView(APIView):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -48,4 +49,16 @@ class UserProfileView(APIView):
         )
 
 
-user_profile = UserProfileView.as_view()
+user_profile = UserProfileAPIView.as_view()
+
+
+class NotesAPIView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        notion = NotionClient()
+        return Response(notion.get_reading_list_database_pages())
+
+
+notes = NotesAPIView.as_view()
