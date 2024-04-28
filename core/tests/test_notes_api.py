@@ -16,14 +16,14 @@ class NotesAPITest(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(username="testuser", password="12345")
 
-    @patch("requests.get")
-    def test_success(self, mock_get):
+    @patch("requests.post")
+    def test_success(self, mock_post):
         with open(
             os.path.join(MOCK_RESPONSES_DIR, "get_reading_list_database_query.json")
         ) as f:
             mock_response = json.load(f)
-        mock_get.return_value.status_code = 200
-        mock_get.return_value.json.return_value = mock_response
+        mock_post.return_value.status_code = 200
+        mock_post.return_value.json.return_value = mock_response
 
         self.client.login(username="testuser", password="12345")
 
