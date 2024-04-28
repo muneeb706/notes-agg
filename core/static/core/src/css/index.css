@@ -1,0 +1,8 @@
+.lift {
+  transition: transform 0.3s ease;
+}
+
+.lift:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
