@@ -1,5 +1,5 @@
 Django==5.0
 psycopg2_binary==2.9.9
-django-allauth==0.61.1
+django-allauth[socialaccount]==0.61.1
 coverage==6.3
 djangorestframework==3.14.0

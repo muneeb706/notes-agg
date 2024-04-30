@@ -1,6 +1,7 @@
 {% extends "account/base_entrance.html" %}
 {% load i18n %}
 {% load allauth account %}
+{% load socialaccount %}
 {% block head_title %}
     {% trans "Notes Agg - Sign In" %}
 {% endblock head_title %}
@@ -58,6 +59,10 @@
                     {% endslot %}
                     {% slot actions %}
                     <button type="submit" class="btn btn-primary w-100">{% trans "Sign In" %}</button>
+                    <a href="{% provider_login_url 'notion' %}" action="reauthenticate" class="btn btn-link w-100 mt-3">
+                        {% trans "Sign In With Notion" %}
+                        <img width="32" height="32" src="https://img.icons8.com/pulsar-line/48/notion.png" class="align-right" alt="Notion Icon"/>
+                    </a>
                 {% endslot %}
             {% endelement %}
             <div class="mt-3 text-center">
