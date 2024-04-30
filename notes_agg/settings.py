@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     # allauth
     "allauth",
     "allauth.account",
+    "allauth.socialaccount",
+    'allauth.socialaccount.providers.notion',
     # djangorestframework
     "rest_framework"
 ]
@@ -48,11 +50,14 @@ MIDDLEWARE = [
 
 # Allauth Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
-    "google": {
+    "notion": {
         "APP": {
-            "client_id": os.environ.get("google_oauth_client_id"),
-            "secret": os.environ.get("google_oauth_secret"),
-        }
+            "client_id": os.environ.get("NOTION_OAUTH_CLIENT_ID"),
+            "secret": os.environ.get("NOTION_OAUTH_CLIENT_SECRET"),
+        },
+        # email address(es) retrieved from the provider are to be
+        # interpreted as verified.
+        "VERIFIED_EMAIL": True
     }
 }
 
@@ -89,8 +94,7 @@ AUTHENTICATION_BACKENDS = [
 WSGI_APPLICATION = "notes_agg.wsgi.application"
 
 # Allauth
-ACCOUNT_AUTHENTICATION_METHOD = "username"
-
+SOCIALACCOUNT_ONLY = True
 # URLS
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/accounts/login"
